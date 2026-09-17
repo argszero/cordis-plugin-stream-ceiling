@@ -1,0 +1,21 @@
+# The @argszero/cordis-plugin-stream-ceiling bundle patch.
+#
+# It needs no deployment-specific config to mount: the default bound (10 minutes
+# of payload silence) only fires on a call that has already produced nothing
+# observable for twice the harness's own `streamIdleTimeoutMs` default.
+#
+# Tune via a profile layer if desired:
+#
+#   - set:
+#       - id: stream-ceiling
+#         config:
+#           maxStalledMs: 600000      # ceiling on the gap between payload chunks
+#           maxCallMs: 1800000        # optional absolute per-call ceiling (0 = off)
+#           payloadGraceMs: 60000     # bound the "#6959 shape": payload closed, no terminal event (0 = off)
+#           code: TIMEOUT             # failure code; a code outside the retry policy's
+#                                     # retryableCodes (e.g. STREAM_CEILING) fails it outright
+#           skipPurposes: [compaction]  # exempt auxiliary calls
+
+- insert:
+    - id: stream-ceiling
+      name: '@argszero/cordis-plugin-stream-ceiling'

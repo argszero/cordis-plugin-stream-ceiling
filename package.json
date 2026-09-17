@@ -1,0 +1,65 @@
+{
+  "name": "@argszero/cordis-plugin-stream-ceiling",
+  "description": "Stream ceiling for dsh: an absolute bound on one model call, mounted on the llm/stream waterfall. The harness's streamIdleTimeoutMs is re-armed by every SSE keep-alive comment (comments never enter the payload stream), so it bounds keep-alive silence rather than the call — a provider that keeps commenting without terminating holds an attempt open indefinitely. This plugin times the gap between payload chunks that a consumer can actually see (plus an optional absolute per-call ceiling) and ends the call with a terminal failure naming the duration actually measured. Compatible with the dsh 0.1.2, 0.1.3, 0.1.5 and 0.1.6 prerelease lines.",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/types/**/*.d.ts",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "cordis",
+    "deepseek-harness",
+    "dsh",
+    "plugin",
+    "llm",
+    "stream",
+    "timeout",
+    "watchdog",
+    "keep-alive",
+    "circuit-breaker"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.2",
+    "@deepseek-ai/dsh-llm": ">=0.1.2-rc.1 <0.2.0 || >=0.1.3-alpha.2 <0.2.0 || >=0.1.5-alpha.1 <0.2.0 || >=0.1.6-alpha.1 <0.2.0"
+  },
+  "dependencies": {
+    "@deepseek-ai/schemastery": "^3.18.1"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "^4.0.2",
+    "@deepseek-ai/dsh-llm": "0.1.2-rc.1",
+    "@types/node": "^22.10.2",
+    "semver": "^7.6.3",
+    "typescript": "^5.5.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "tsc",
+    "test": "node --test \"test/*.spec.mjs\""
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh-llm": {
+      "optional": false
+    }
+  }
+}

@@ -21,6 +21,14 @@
     "LICENSE"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/argszero/cordis-plugin-stream-ceiling.git"
+  },
+  "homepage": "https://github.com/argszero/cordis-plugin-stream-ceiling#readme",
+  "bugs": {
+    "url": "https://github.com/argszero/cordis-plugin-stream-ceiling/issues"
+  },
   "keywords": [
     "cordis",
     "deepseek-harness",

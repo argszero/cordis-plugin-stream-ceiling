@@ -104,8 +104,34 @@ context is torn down. Bounding the adapter's socket is the adapter's own job.
 
 ## Requirements
 
-- `@deepseek-ai/dsh-llm` `>=0.1.2-rc.1 <0.2.0` (the `llm/stream` waterfall and
-  its `StreamChunk` grammar are identical across those prerelease lines)
+- `@deepseek-ai/dsh-llm`:
+
+  ```
+  >=0.1.2-rc.1 <0.2.0 || >=0.1.3-alpha.2 <0.2.0 || >=0.1.5-alpha.1 <0.2.0 || >=0.1.6-alpha.1 <0.2.0
+  ```
+
+  Those four comparators admit exactly eight released versions — `0.1.2-rc.1`,
+  `0.1.3-alpha.2`, `0.1.5-alpha.1`, `0.1.5-alpha.2`, `0.1.5-rc.1`, `0.1.5-rc.2`,
+  `0.1.6-alpha.1`, `0.1.6-alpha.2` — and each of them has had this suite built and
+  run against it with the peer pinned to that single line. The `llm/stream`
+  waterfall and its `StreamChunk` grammar are identical across all of them.
+
+  **Write it with one comparator per line, and quote the whole thing.** A semver
+  comparator admits a prerelease only when some comparator *in the same group*
+  shares that prerelease's `major.minor.patch` tuple, so the upper bound does not
+  do what it looks like it does. This all-covering-looking one-liner admits
+  **one** version:
+
+  ```jsonc
+  // admits only 0.1.2-rc.1 — "<0.2.0" is inert for prereleases, and no other
+  // comparator in the group names the 0.1.3 / 0.1.5 / 0.1.6 tuples
+  ">=0.1.2-rc.1 <0.2.0"
+  ```
+
+  `test/peer-range.spec.mjs` recomputes the admitted set with `semver` and fails
+  if it and this section disagree — the quoted range above is asserted against
+  the manifest, so the two cannot drift apart.
+
 - `@deepseek-ai/cordis` `^4.0.2`
 
 ## Tests
@@ -116,7 +142,8 @@ npm install && npm run build && npm test
 
 18 tests: the arithmetic, the wrapper against a driven clock (including that 500
 simulated keep-alive pulses cannot re-arm a bound), and an end-to-end run through
-a real cordis `Context` and `llm/stream` waterfall.
+a real cordis `Context` and `llm/stream` waterfall. `test/peer-range.spec.mjs`
+adds 5 more that guard the peer range and the quoted requirement above.
 
 ## License
 
